@@ -1,0 +1,27 @@
+I"s(function() {
+  this.App = (function(Backbone, Marionette) {
+    var WeatherApp;
+    WeatherApp = new Marionette.Application;
+    WeatherApp.addRegions({
+      container: "#container-region",
+      leftSideNav: "#side-nav-region"
+    });
+    WeatherApp.on('before:start', function() {
+      return WeatherApp.weather = {};
+    });
+    WeatherApp.on("start", function() {
+      if (Backbone.history) {
+        return Backbone.history.start({
+          pushState: false
+        });
+      }
+    });
+    return WeatherApp;
+  })(Backbone, Marionette);
+
+  $(document).ready(function() {
+    return App.start();
+  });
+
+}).call(this);
+:ET

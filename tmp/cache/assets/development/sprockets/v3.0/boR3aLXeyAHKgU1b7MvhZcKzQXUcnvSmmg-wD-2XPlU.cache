@@ -1,0 +1,40 @@
+I"Q(function() {
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  this.App.module("WeatherApp.Presenter", function(Presenter, App, Backbone, Marionette, $, _) {
+    Presenter.raises = {
+      weatherFetch: "entities:weather:fetch"
+    };
+    return Presenter.WeatherAppLayout = (function(superClass) {
+      extend(WeatherAppLayout, superClass);
+
+      function WeatherAppLayout() {
+        return WeatherAppLayout.__super__.constructor.apply(this, arguments);
+      }
+
+      WeatherAppLayout.prototype.template = "#weather_layout";
+
+      WeatherAppLayout.prototype.regions = {
+        weatherContentRegion: "#weather-content-region"
+      };
+
+      WeatherAppLayout.prototype.events = {
+        "click #weather-toggle": "weatherToggleClicked"
+      };
+
+      WeatherAppLayout.prototype.initialize = function(options) {
+        return options = options || {};
+      };
+
+      WeatherAppLayout.prototype.weatherToggleClicked = function(event) {
+        return console.log("toggle clicked!");
+      };
+
+      return WeatherAppLayout;
+
+    })(Marionette.LayoutView);
+  });
+
+}).call(this);
+:ET

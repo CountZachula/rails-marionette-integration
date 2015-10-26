@@ -1,0 +1,7 @@
+I"c(function() {
+  _.templateSettings = {
+    interpolate: /\{\{(.+?)\}\}/g
+  };
+
+}).call(this);
+:ET

@@ -1,0 +1,64 @@
+I"0(function() {
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  this.App.module("WeatherApp.Presenter", function(Presenter, App, Backbone, Marionette, $, _) {
+    Presenter.raises = {
+      weatherFetch: "entities:weather:fetch"
+    };
+    return Presenter.WeatherAppLayout = (function(superClass) {
+      extend(WeatherAppLayout, superClass);
+
+      function WeatherAppLayout() {
+        return WeatherAppLayout.__super__.constructor.apply(this, arguments);
+      }
+
+      WeatherAppLayout.prototype.template = "#weather_layout";
+
+      WeatherAppLayout.prototype.regions = {
+        todayRegion: "#today-region",
+        tomorrowRegion: "#tomorrow-region"
+      };
+
+      WeatherAppLayout.prototype.events = {
+        "click #weather-toggle": "weatherToggleClicked"
+      };
+
+      WeatherAppLayout.prototype.initialize = function(options) {
+        return options = options || {};
+      };
+
+      WeatherAppLayout.prototype.onShow = function() {
+        debugger;
+        var fetchingConditions, todayTile, tomorrowTile;
+        fetchingConditions = App.request(Presenter.raises.weatherFetch);
+        $.when(fetchingConditions).success((function(_this) {
+          return function(data) {
+            debugger;
+          };
+        })(this)).fail((function(_this) {
+          return function(data) {
+            debugger;
+          };
+        })(this));
+        todayTile = new App.TileApp.View.TileItemView({
+          title: "Today",
+          high: 79,
+          low: 68
+        });
+        this.todayRegion.show(todayTile);
+        tomorrowTile = new App.TileApp.View.TileItemView({
+          title: "Tomorrow",
+          high: 80,
+          low: 70
+        });
+        return this.tomorrowRegion.show(tomorrowTile);
+      };
+
+      return WeatherAppLayout;
+
+    })(Marionette.LayoutView);
+  });
+
+}).call(this);
+:ET

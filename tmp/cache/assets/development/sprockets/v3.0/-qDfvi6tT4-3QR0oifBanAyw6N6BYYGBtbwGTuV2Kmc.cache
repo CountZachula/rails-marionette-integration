@@ -1,0 +1,67 @@
+I"\	(function() {
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  this.App.module("WeatherApp.Presenter", function(Presenter, App, Backbone, Marionette, $, _) {
+    Presenter.raises = {
+      weatherFetch: "entities:weather:fetch"
+    };
+    return Presenter.WeatherAppLayout = (function(superClass) {
+      extend(WeatherAppLayout, superClass);
+
+      function WeatherAppLayout() {
+        return WeatherAppLayout.__super__.constructor.apply(this, arguments);
+      }
+
+      WeatherAppLayout.prototype.template = "#weather_layout";
+
+      WeatherAppLayout.prototype.regions = {
+        todayRegion: "#today-region",
+        tomorrowRegion: "#tomorrow-region"
+      };
+
+      WeatherAppLayout.prototype.events = {
+        "click #refresh": "refreshClicked"
+      };
+
+      WeatherAppLayout.prototype.initialize = function(options) {
+        return options = options || {};
+      };
+
+      WeatherAppLayout.prototype.onShow = function() {
+        var fetchingConditions, tomorrowTile;
+        fetchingConditions = App.request(Presenter.raises.weatherFetch);
+        $.when(fetchingConditions).done((function(_this) {
+          return function(data) {
+            var conditionToday, conditionTomorrow, todayTile;
+            conditionToday = new App.Entities.Condition(data.models[0].attributes.list[0]);
+            conditionTomorrow = new App.Entities.Condition(data.models[0].attributes.list[3]);
+            todayTile = new App.TileApp.View.TileItemView({
+              model: conditionToday
+            });
+            return _this.todayRegion.show(todayTile);
+          };
+        })(this)).fail((function(_this) {
+          return function(data) {
+            debugger;
+          };
+        })(this));
+        tomorrowTile = new App.TileApp.View.TileItemView({
+          title: "Tomorrow",
+          high: 80,
+          low: 70
+        });
+        return this.tomorrowRegion.show(tomorrowTile);
+      };
+
+      WeatherAppLayout.prototype.refreshClicked = function(event) {
+        return console.log("Refresh clicked!");
+      };
+
+      return WeatherAppLayout;
+
+    })(Marionette.LayoutView);
+  });
+
+}).call(this);
+:ET

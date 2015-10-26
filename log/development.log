@@ -1,0 +1,20 @@
+
+
+Started GET "/" for 127.0.0.1 at 2015-10-26 15:20:31 -0500
+Processing by WeatherController#index as HTML
+  Rendered marionette/common/_common_loading.html (0.3ms)
+  Rendered marionette/common/_common_no_data.html (0.2ms)
+  Rendered marionette/weather/_weather_layout.html (0.4ms)
+  Rendered marionette/tile/_tile.html (0.3ms)
+  Rendered weather/index.haml within layouts/application (173.9ms)
+Completed 200 OK in 452ms (Views: 442.4ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/conditions.json" for 127.0.0.1 at 2015-10-26 15:20:32 -0500
+Processing by WeatherController#conditions as JSON
+Completed 200 OK in 919ms (Views: 0.9ms | ActiveRecord: 0.0ms)
+
+
+Started GET "/conditions.json" for 127.0.0.1 at 2015-10-26 15:20:35 -0500
+Processing by WeatherController#conditions as JSON
+Completed 200 OK in 472ms (Views: 0.9ms | ActiveRecord: 0.0ms)

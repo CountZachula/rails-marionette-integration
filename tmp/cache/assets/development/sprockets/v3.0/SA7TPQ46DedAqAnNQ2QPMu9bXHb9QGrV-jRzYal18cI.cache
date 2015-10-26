@@ -1,0 +1,81 @@
+I"G(function() {
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  this.App.module("WeatherApp.Presenter", function(Presenter, App, Backbone, Marionette, $, _) {
+    Presenter.raises = {
+      weatherFetch: "entities:weather:fetch"
+    };
+    return Presenter.WeatherAppLayout = (function(superClass) {
+      extend(WeatherAppLayout, superClass);
+
+      function WeatherAppLayout() {
+        return WeatherAppLayout.__super__.constructor.apply(this, arguments);
+      }
+
+      WeatherAppLayout.prototype.template = "#weather_layout";
+
+      WeatherAppLayout.prototype.regions = {
+        todayRegion: "#today-region",
+        tomorrowRegion: "#tomorrow-region"
+      };
+
+      WeatherAppLayout.prototype.events = {
+        "click #btn-refresh": "refreshClicked"
+      };
+
+      WeatherAppLayout.prototype.initialize = function(options) {
+        return options = options || {};
+      };
+
+      WeatherAppLayout.prototype.onShow = function() {
+        return this.fetchWeather();
+      };
+
+      WeatherAppLayout.prototype.fetchWeather = function() {
+        var fetchingConditions, loadingView;
+        loadingView = new App.Common.Views.Loading({
+          title: "Loading Weather",
+          message: "Please wait while we fetch weather conditions for you."
+        });
+        this.todayRegion.show(loadingView);
+        fetchingConditions = App.request(Presenter.raises.weatherFetch);
+        return $.when(fetchingConditions).done((function(_this) {
+          return function(data) {
+            var todayTile, tomorrowTile;
+            todayTile = new App.TileApp.View.TileItemView({
+              title: "Today",
+              model: App.Entities.conditions.models[0]
+            });
+            _this.todayRegion.show(todayTile);
+            tomorrowTile = new App.TileApp.View.TileItemView({
+              title: "Tomorrow",
+              model: App.Entities.conditions.models[1]
+            });
+            return _this.tomorrowRegion.show(tomorrowTile);
+          };
+        })(this)).fail((function(_this) {
+          return function(data) {
+            var noDataView;
+            noDataView = new App.Common.Views.NoData({
+              title: "No Data",
+              message: "Sorry, no weather data is available."
+            });
+            return _this.todayRegion.show(noDataView);
+          };
+        })(this));
+      };
+
+      WeatherAppLayout.prototype.refreshClicked = function(event) {
+        this.todayRegion.clear();
+        this.tomorrowRegion.clear();
+        return this.fetchWeather();
+      };
+
+      return WeatherAppLayout;
+
+    })(Marionette.LayoutView);
+  });
+
+}).call(this);
+:ET

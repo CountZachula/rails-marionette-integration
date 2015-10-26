@@ -1,0 +1,23 @@
+I"i(function() {
+  this.App.module("WeatherApp", function(WeatherApp, App) {
+    return WeatherApp.Controller = {
+      showDefault: function() {
+        this.layout = new WeatherApp.Presenter.WeatherAppLayout();
+        App.container.show(this.layout);
+        return this.layout.on("show", (function(_this) {
+          return function() {
+            return _this.showCurrent();
+          };
+        })(this));
+      },
+      showCurrent: function() {
+        return console.log('showCurrent');
+      },
+      showForecast: function() {
+        return console.log('showForecast');
+      }
+    };
+  });
+
+}).call(this);
+:ET

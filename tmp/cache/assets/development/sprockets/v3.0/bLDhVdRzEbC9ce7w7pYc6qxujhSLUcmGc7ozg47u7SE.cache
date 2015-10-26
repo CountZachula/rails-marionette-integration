@@ -1,0 +1,88 @@
+I"6(function() {
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  this.App.module("Entities", function(Entities, App, Backbone, Marionette, $, _) {
+    var API;
+    Entities.weatherTypes = {
+      clear: "Clear",
+      clouds: "Clouds",
+      rain: "Rain"
+    };
+    Entities.Condition = (function(superClass) {
+      extend(Condition, superClass);
+
+      function Condition() {
+        return Condition.__super__.constructor.apply(this, arguments);
+      }
+
+      Condition.prototype.initialize = function(options) {
+        debugger;
+        options = options || {};
+        this.title = options.title || "";
+        this.high = (this.convertKtoF(options.list[0].main.temp_max)) || 73;
+        this.low = (this.convertKtoF(options.list[3].main.temp_min)) || 62;
+        this.todayStatus = options.list[0].weather.main || Entities.weatherTypes.clear;
+        return this.tomorrowStatus = options.list[3].weather.main || Entities.weatherTypes.clear;
+      };
+
+      Condition.prototype.convertKtoF = function(tempK) {
+        var tempF;
+        tempF = parseInt((tempK - 273.15) * 1.8 + 32, 10);
+        return tempF;
+      };
+
+      return Condition;
+
+    })(Backbone.Model);
+    Entities.Conditions = (function(superClass) {
+      extend(Conditions, superClass);
+
+      function Conditions() {
+        return Conditions.__super__.constructor.apply(this, arguments);
+      }
+
+      Conditions.prototype.model = Entities.Condition;
+
+      Conditions.prototype.initialize = function(models, options) {
+        return options = options || {};
+      };
+
+      Conditions.prototype.url = function() {
+        return "http://api.openweathermap.org/data/2.5/forecast?q=tulsa,ok&appid=d1c22c98a4c01097b436b34c17a81dad";
+      };
+
+      return Conditions;
+
+    })(Backbone.Collection);
+    API = {
+      generateFetchPromise: function(opts) {
+        var defer;
+        defer = $.Deferred();
+        if (Entities.conditions === void 0) {
+          Entities.conditions = new Entities.Conditions([]);
+        }
+        Entities.conditions.fetch({
+          data: opts.data,
+          success: function() {
+            return defer.resolve(Entities.conditions.list);
+          }
+        });
+        return defer.promise();
+      },
+      fetchConditions: function(options) {
+        var opts;
+        if (opts === null || opts === void 0) {
+          opts = {};
+          opts.data = {};
+        }
+        return this.generateFetchPromise(opts);
+      }
+    };
+    return App.reqres.setHandler("entities:weather:fetch", function(opts) {
+      return API.fetchConditions(opts);
+    });
+  });
+
+}).call(this);
+:ET

@@ -1,0 +1,39 @@
+I"(function() {
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  this.App.module("TileApp.View", function(View, App) {
+    return View.TileItemView = (function(superClass) {
+      extend(TileItemView, superClass);
+
+      function TileItemView() {
+        return TileItemView.__super__.constructor.apply(this, arguments);
+      }
+
+      TileItemView.prototype.template = "#tile";
+
+      TileItemView.prototype.initialize = function(options) {
+        options = options || {};
+        this.title = options.title || "";
+        debugger;
+        this.high = this.model.get("high") || 73;
+        this.low = this.model.get("low") || 62;
+        return this.status = this.model.get("status") || App.Entities.weatherTypes.clear;
+      };
+
+      TileItemView.prototype.templateHelpers = function() {
+        return {
+          title: this.title,
+          high: this.high,
+          low: this.low,
+          status: this.status
+        };
+      };
+
+      return TileItemView;
+
+    })(Marionette.ItemView);
+  });
+
+}).call(this);
+:ET

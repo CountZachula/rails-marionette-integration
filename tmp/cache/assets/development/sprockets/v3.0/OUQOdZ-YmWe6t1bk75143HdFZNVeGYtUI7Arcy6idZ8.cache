@@ -1,0 +1,72 @@
+I"°(function() {
+  var extend = function(child, parent) { for (var key in parent) { if (hasProp.call(parent, key)) child[key] = parent[key]; } function ctor() { this.constructor = child; } ctor.prototype = parent.prototype; child.prototype = new ctor(); child.__super__ = parent.prototype; return child; },
+    hasProp = {}.hasOwnProperty;
+
+  this.App.module("Entities", function(Entities, App, Backbone, Marionette, $, _) {
+    var API;
+    Entities.Condition = (function(superClass) {
+      extend(Condition, superClass);
+
+      function Condition() {
+        return Condition.__super__.constructor.apply(this, arguments);
+      }
+
+      Condition.prototype.initialize = function(options) {
+        return options = options || {};
+      };
+
+      return Condition;
+
+    })(Backbone.Model);
+    Entities.Conditions = (function(superClass) {
+      extend(Conditions, superClass);
+
+      function Conditions() {
+        return Conditions.__super__.constructor.apply(this, arguments);
+      }
+
+      Conditions.prototype.model = Entities.Condition;
+
+      Conditions.prototype.initialize = function(models, options) {
+        return options = options || {};
+      };
+
+      Conditions.prototype.url = function() {
+        return "http://api.openweathermap.org/data/2.5/forecast?id=524901&appid=bd82977b86bf27fb59a04b61b657fb6f";
+      };
+
+      return Conditions;
+
+    })(Backbone.Collection);
+    API = {
+      generateFetchPromise: function(opts) {
+        var defer;
+        defer = $.Deferred();
+        if (Entities.conditions === void 0) {
+          Entities.conditions = new Entities.Conditions([]);
+        }
+        Entities.conditions.fetch({
+          data: opts.data,
+          success: function() {
+            debugger;
+            return defer.resolve(Entities.conditions);
+          }
+        });
+        return defer.promise();
+      },
+      fetchConditions: function(options) {
+        var opts;
+        if (opts === null || opts === void 0) {
+          opts = {};
+          opts.data = {};
+        }
+        return this.generateFetchPromise(opts);
+      }
+    };
+    return App.reqres.setHandler("entities:weather:fetch", function(opts) {
+      return API.fetchConditions(opts);
+    });
+  });
+
+}).call(this);
+:ET
