@@ -1,0 +1,27 @@
+<script id="weather_layout" type="text/template">
+	<div class="row dashboard">
+		<div class="wrapper">
+			<div class="welcome-box">
+				<p>Welcome! Here's the weather for...</p>
+			</div>
+		</div>
+		<div id="dash-nav">
+			<ul class="col-md-12">
+				<li>
+					<i class="fa fa-map-marker"></i><p>Tulsa, Oklahoma</p>
+				</li>
+			</ul>
+		</div>
+	</div>
+	<div class="row dashboard">
+		<div class="wrapper">
+			<header class="dashboard-header"><span id="title">Conditions</span> <button type="button" id="btn-refresh" class="btn btn-success" aria-label="Refresh">
+  <span class="fa fa-refresh" aria-hidden="true"></span>
+</button></header>
+			<div class="large-box" id="glance-region">
+				<div id="today-region"></div>
+				<div id="tomorrow-region"></div>
+			</div>
+		</div>
+	</div>
+</script>
